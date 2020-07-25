@@ -1,0 +1,38 @@
+---
+title: "HelloWorld.md"
+author: "Qizhe Cui"
+date: "25/07/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## This is a markdown file
+
+Now I am just randomly typing anything that comes to my mind for example  
+**Japanese Bento** and ***sushi set*** that I just have.  
+
+Besides that, I got to say KFC is a real hunger killer because it offers a seaseonal deal of 9 pieces for ***5.99 pounds ***!  
+
+```{r}
+chicken_deal = 5.99
+10 * chicken_deal
+
+```
+
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
