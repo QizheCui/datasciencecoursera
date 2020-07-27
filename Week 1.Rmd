@@ -1,0 +1,242 @@
+---
+title: "Week 1"
+author: "Qizhe Cui"
+date: "26/07/2020"
+output:
+  html_document: default
+  pdf_document: default
+---
+1. A vector contains objects from the same class, it can be expressed as c() or vector("type", length = )
+2. empty vector can be created by 
+```{r}
+vector("character", length = 3)
+vector("logical", length = 4)
+x = c(3,4,5,6,1)
+as.logical(x)
+```
+## How to create a matrix
+
+We have three methods listed below
+```{r}
+#Assign a matrix with value column_wise
+m <- matrix(1:9, nrow = 3, ncol = 3)
+print (m)
+
+#Give a vector its dimension
+n = 1:6
+dim(n)= c(2,3)
+print(n)
+
+#binding several vector in cbinding or rbinding
+
+a= 1:3
+b=2:4
+c = 3:5
+d=4:6
+rbind(a,b,c,d)
+cbind(a,b,c,d)
+```
+# Factor
+
+We can create a factor which represents categorical data and it is self-describing
+```{r}
+ p = factor(c("yes","yes","no","no", "yes", TRUE, 1 +3i, "Hello"), levels = c("yes", "no", "TRUE", 1+3i, "Hello"))
+q = factor(c("yes","yes","no","no", "yes", TRUE, 1 +3i, "Hello"))
+p
+q
+table(p)
+unclass(p)
+unclass(q)
+
+
+```
+ **So we sometimes need to redefine the levels of a factor to cater a baseline level**  
+ 
+ 
+# Missing values
+
+NaN: missing numeric value  
+
+NA: missing value including integer NA, character NA etc  
+
+
+NaN is a special case of NA
+```{r}
+x = c(NA, NaN)
+is.na(x)
+is.nan(x)
+
+y= Inf/ Inf
+y
+
+
+```
+# Data Frames
+
+We can create a data frame or convert a data frame into a matrix. Unlike matrix, data frame can store different classes.  
+We normally read a dataframe by **read.csv( ) or read.table( )**
+```{r}
+ x = data.frame("weather" = c("hot", "cold", "humid", "warm"), "bar" = c(TRUE, TRUE, TRUE, FALSE))
+
+x
+row.names(x)
+data.matrix(x)
+
+```
+
+ # Names
+ 
+ R objects can have name, for example a vector
+```{r}
+y<-1:4
+names(y)
+names(y) <- c("sushi","nigiri","ramen","katsu")
+y
+```
+ 
+ For list to have names:
+```{r}
+z <- list(1,2,3,9)
+P <- list(a=1, b =2, sushi =3, haha = 9)
+z
+P
+```
+For matrix to have name on its column and row:
+```{r}
+m = matrix(1:4, nrow = 2, ncol = 2)
+dimnames(m)<-list(c("quality", "price"), c("和牛", "sushi"))
+m
+```
+# deput and dump
+
+If we have build a function or object and we want to use it agian later, then we can use the dput/dump function to save it to a file. Dump can be used for multiple objects
+```{r}
+Q= matrix(1:9, nrow = 3, ncol = 3)
+W = list(a="sushi", b ="nigiri", c<-"ramen")
+Q
+dput(Q)
+#dput(Q, file = "save Q for use.R")
+#dump(c("Q", "R"), file ="both Q and R.R"))
+#We cannot show it but this can save both Q and R
+```
+ **dget("") can only be used on a single object**  
+
+# How to read data?
+
+We can read data from csv file or directly from url and we can read only part of the data or compressed file.
+```{r}
+a = file("Fish .csv")
+b =readLines(a,10)
+c =read.csv("Fish .csv") #a is the same as c
+d =url("https://www.jhsph.edu/")
+
+
+```
+we can also use **gzfile** or **bzfile** to open compressed file in each compressed form
+
+# Subetting 
+
+we can use [] or [[]] or $ to subset R objects
+```{r}
+x = c("a","a","b","ahaha",TRUE,FALSE,5,9, 3+4i)
+x[1:4]
+u <- x>"a" #u compare all elements in x withx "a"
+u
+x[u] #we get all elements in x that are greater than "a
+```
+# Subsetting a list 
+We can subsetting a list that has names for its element. Note that the [[ ]] is cannot extract multiple elements with only one exception [[c() ]]. [[ ]] will return a 
+```{r}
+x = list(a= 3,b=4,c=5,d=6,fizz = 0)
+x[1:3]
+x[[1]]
+x$fizz
+
+y = list(one = list(1,3,5,6,2), two = list(3.14,2.98,8.63))
+y[[1]][[2]]
+y[[c(2,3)]] #The only expcetion that double braket can take multiple elements
+y[[2]][1:2] #The first two elements of the second subset
+jesus ="one"
+y[[jesus]] #We can replace the name of an lelement for convinence
+
+
+```
+# How to subset a matrix
+
+We can use similar method of list to subset a specific element or lines of a matrix
+```{r}
+x=matrix(1:9, 3,3)
+x[3,]
+x[,2]
+x[,1, drop =FALSE] #drop = FALSE can return a matrix rather than a sequence of number
+x[2,3, drop =FALSE]
+```
+## Partial matching 
+```{r}
+b = list(hahaha=TRUE, walada=3)
+b$h #This can save a lot of typing 
+b[["w", exact =FALSE]] #We need to cancel the exact typing to allow 
+```
+# Subsetting Removing missing values
+
+Remove NA value in a list or in multiple lists
+```{r}
+a = list(first= NA, second = NA, third =TRUE, fourth = 4, fifth = 1 +3i)
+bad <- is.na(a)
+bad
+a[!bad] #This preserve the part of list that does not have NA
+```
+ In order to remove NA in a database we need to use methods **good = complete.cases(a)** in which good is a variable denoting the complete cases in object a. Then we can use ** a[good] ** to obtain the data that don't have NA.
+
+
+# vectorised operation
+One advantage of R is that we can vectorised mathematical operation so we get can several result in one go. This includes sequence and matrix:
+```{r}
+x = c(1.4,5.3,2.5,9.1)
+y = 2:5
+x+y
+x * y
+
+```
+```{r}
+a = matrix (rep(10,9),3,3)
+b=matrix(c(1,3,2,4,2,1,4,21,3), 3,3)
+a
+b
+a + b
+a *b
+a %*% b #This is the real matrix multiplication
+
+```
+
+# Dataframe useful function
+
+```{r}
+#If we want to get the mean of each column and rule out the NA value
+l = read.csv("hw1_data.csv")
+colMeans(l,na.rm = TRUE)
+
+#If we want to read certain rows
+
+l[c(1,3,5),]
+
+#If we want the mean of a single column
+
+mean(l$Ozone, na.rm = TRUE) #We use $ to turn the dataframe into a sequence
+
+mean(l[["Wind"]],na.rm = TRUE) #Note that [[ ]] return a sequence of number which is accepted by mean function
+
+sort(l$Ozone, decreasing = TRUE) #Sort can only apply to one column each time
+
+max(l$Ozone, na.rm = TRUE) #This return the max of a column
+
+#If we want to select conditional rows then we use it which return the rows where month =5 
+
+l[l["Month"] ==5,]
+
+
+
+```
+
+
+
